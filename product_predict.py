@@ -226,5 +226,5 @@ df_summary['stock_plan'] = df_summary['avg_per_month'] * 1.5
 df_summary['stock_to_order'] = (df_summary['stock_plan'] - df_summary['stock_current']).clip(lower=0)
 
 # Hiển thị bảng
-st.dataframe(df_summary.sort_values(by='forecast_3_5m', ascending=False).head(20))
+st.dataframe(df_summary.sort_values(by='forecast_3_5m', ascending=False))
 
