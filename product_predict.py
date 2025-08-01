@@ -42,6 +42,26 @@ df_product = df[df['code'] == selected_code]
 df_monthly = df_product.resample('ME', on='date')[
     'numsell'].sum().fillna(0).reset_index()
 
+# 📦 Phân tích kế hoạch tồn kho theo 6 tháng gần nhất
+st.subheader("📦 Kế hoạch tồn kho theo 6 tháng gần nhất")
+
+six_months_ago = df['date'].max() - pd.DateOffset(months=6)
+df_recent = df[df['date'] >= six_months_ago]
+
+df_summary = df_recent.groupby('code')['numsell'].sum().reset_index()
+df_summary.columns = ['code', 'total_6m']
+df_summary['avg_per_month'] = df_summary['total_6m'] / 6
+df_summary['forecast_3_5m'] = df_summary['avg_per_month'] * 3.5
+df_summary['stock_current'] = df_summary['avg_per_month'] * 3
+df_summary['stock_plan'] = df_summary['avg_per_month'] * 1.5
+df_summary['stock_to_order'] = (df_summary['stock_plan'] - df_summary['stock_current']).clip(lower=0)
+
+# Hiển thị bảng
+st.dataframe(df_summary.sort_values(by='forecast_3_5m', ascending=False).head(20))
+
+
+
+
 # Thêm đặc trưng thời gian
 df_monthly['month'] = df_monthly['date'].dt.month
 df_monthly['quarter'] = df_monthly['date'].dt.quarter
