@@ -31,6 +31,7 @@ if df_sales is not None and df_tonkho is not None:
     df_result = pd.merge(sales_summary, df_tonkho[["spcode", "tonkho", "hangve","conlai"]], on="spcode", how="left")
     df_result["tonkho"] = df_result["tonkho"].fillna(0)
     df_result["hangve"] = df_result["hangve"].fillna(0)
+     df_result["conlai"] = df_result["conlai"].fillna(0)
     df_result["available"] = df_result["tonkho"] + df_result["hangve"]
     df_result["need_order"] = df_result["available"] < df_result["forecast_qty"]
 
@@ -55,6 +56,7 @@ if df_sales is not None and df_tonkho is not None:
         st.pyplot(fig)
 else:
     st.warning("Dữ liệu chưa được tải.")
+
 
 
 
