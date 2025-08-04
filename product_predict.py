@@ -58,8 +58,8 @@ if df_sales is not None and df_tonkho is not None:
     
     # Lọc và nhóm dữ liệu theo tháng cho sản phẩm được chọn
     df_selected = df_sales[df_sales['spcode'] == selected_spcode].copy()
-    df_selected['month'] = df_selected['date'].dt.to_period('M').dt.to_timestamp()
-    monthly_sales = df_selected.groupby('month')['numsell'].sum().reset_index()
+    df_selected['month'] = df_sales['date'].dt.to_period('M').dt.to_timestamp()
+    monthly_sales = df_sales.groupby('month')['numsell'].sum().reset_index()
     
     # Hiển thị biểu đồ lịch sử
     fig = px.line(
@@ -121,6 +121,7 @@ if df_sales is not None and df_tonkho is not None:
 
 else:
     st.warning("Dữ liệu chưa được tải.")
+
 
 
 
