@@ -39,9 +39,35 @@ if df_sales is not None and df_tonkho is not None:
 
     st.subheader("📋 Danh sách sản phẩm")
     st.dataframe(df_result)
+
+    # --- Chọn mã sản phẩm từ combobox
+    st.subheader("📈 Lịch sử số lượng bán theo tháng")
     
+    # Lấy danh sách spcode duy nhất và sắp xếp
+    spcode_list = sorted(df_sales['spcode'].unique())
+    
+    # Combobox để chọn mã sản phẩm
+    selected_spcode = st.selectbox("Chọn mã sản phẩm:", spcode_list)
+    
+    # Lọc dữ liệu theo mã đã chọn
+    df_selected = df_sales[df_sales['spcode'] == selected_spcode].copy()
+    
+    # Nhóm theo tháng
+    df_selected['month'] = df_selected['date'].dt.to_period('M').astype(str)
+    monthly_sales = df_selected.groupby('month')['numsell'].sum().reset_index()
+    
+    # Vẽ biểu đồ line chart
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.plot(monthly_sales['month'], monthly_sales['numsell'], marker='o')
+    ax.set_title(f"Lịch sử số lượng bán hàng theo tháng: {selected_spcode}")
+    ax.set_xlabel("Tháng")
+    ax.set_ylabel("Số lượng bán")
+    plt.xticks(rotation=45)
+    st.pyplot(fig)
+
 else:
     st.warning("Dữ liệu chưa được tải.")
+
 
 
 
