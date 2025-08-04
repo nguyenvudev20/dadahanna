@@ -40,33 +40,34 @@ if df_sales is not None and df_tonkho is not None:
     st.subheader("📋 Danh sách sản phẩm")
     st.dataframe(df_result)
 
-    # --- Chọn mã sản phẩm từ combobox
-    st.subheader("📈 Lịch sử số lượng bán theo tháng")
+   # Combobox chọn mã sản phẩm
+    st.subheader("📈 Lịch sử bán theo tháng")
+    selected_spcode = st.selectbox("Chọn mã sản phẩm để xem biểu đồ:", df_result['spcode'].unique())
     
-    # Lấy danh sách spcode duy nhất và sắp xếp
-    spcode_list = sorted(df_sales['spcode'].unique())
-    
-    # Combobox để chọn mã sản phẩm
-    selected_spcode = st.selectbox("Chọn mã sản phẩm:", spcode_list)
-    
-    # Lọc dữ liệu theo mã đã chọn
+    # Dữ liệu lịch sử của mã sản phẩm
     df_selected = df_sales[df_sales['spcode'] == selected_spcode].copy()
-    
-    # Nhóm theo tháng
     df_selected['month'] = df_selected['date'].dt.to_period('M').astype(str)
     monthly_sales = df_selected.groupby('month')['numsell'].sum().reset_index()
     
-    # Vẽ biểu đồ line chart
-    fig, ax = plt.subplots(figsize=(10, 4))
-    ax.plot(monthly_sales['month'], monthly_sales['numsell'], marker='o')
-    ax.set_title(f"Lịch sử số lượng bán hàng theo tháng: {selected_spcode}")
-    ax.set_xlabel("Tháng")
-    ax.set_ylabel("Số lượng bán")
-    plt.xticks(rotation=45)
-    st.pyplot(fig)
+    # Biểu đồ tương tác với tooltip
+    fig = px.line(
+        monthly_sales,
+        x="month",
+        y="numsell",
+        markers=True,
+        title=f"Lịch sử bán hàng theo tháng - {selected_spcode}",
+        labels={"month": "Tháng", "numsell": "Số lượng bán"},
+        hover_data={"month": True, "numsell": True}
+    )
+    fig.update_traces(hovertemplate='Tháng: %{x}<br>Số lượng: %{y}')
+    fig.update_layout(xaxis_tickangle=-45)
+    
+    st.plotly_chart(fig, use_container_width=True)
+
 
 else:
     st.warning("Dữ liệu chưa được tải.")
+
 
 
 
