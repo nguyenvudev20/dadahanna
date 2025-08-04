@@ -31,7 +31,7 @@ if df_sales is not None and df_tonkho is not None:
     df_result = pd.merge(sales_summary, df_tonkho[["spcode", "tonkho", "hangve","conlai"]], on="spcode", how="left")
     df_result["tonkho"] = df_result["tonkho"].fillna(0)
     df_result["hangve"] = df_result["hangve"].fillna(0)
-     df_result["conlai"] = df_result["conlai"].fillna(0)
+    df_result["conlai"] = df_result["conlai"].fillna(0)
     df_result["available"] = df_result["tonkho"] + df_result["hangve"]
     df_result["need_order"] = df_result["available"] < df_result["forecast_qty"]
 
@@ -40,22 +40,9 @@ if df_sales is not None and df_tonkho is not None:
     st.subheader("📋 Danh sách sản phẩm")
     st.dataframe(df_result)
     
-    st.subheader("📋 Danh sách sản phẩm cần đặt hàng")
-    st.dataframe(df_need_order)
-
-    top20 = df_need_order.sort_values(by="forecast_qty", ascending=False).head(20)
-
-    if not top20.empty:
-        fig, ax = plt.subplots(figsize=(12, 5))
-        ax.bar(top20["spcode"], top20["forecast_qty"], label="Forecast Qty (3.5 tháng)")
-        ax.bar(top20["spcode"], top20["available"], label="Tồn kho + Hàng về")
-        ax.set_title("Top 20 sản phẩm cần đặt hàng")
-        ax.set_ylabel("Số lượng")
-        ax.set_xticklabels(top20["spcode"], rotation=90)
-        ax.legend()
-        st.pyplot(fig)
 else:
     st.warning("Dữ liệu chưa được tải.")
+
 
 
 
