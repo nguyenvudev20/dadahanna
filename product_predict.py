@@ -36,6 +36,9 @@ if df_sales is not None and df_tonkho is not None:
 
     df_need_order = df_result[df_result["need_order"] == True]
 
+    st.subheader("📋 Danh sách sản phẩm")
+    st.dataframe(df_result)
+    
     st.subheader("📋 Danh sách sản phẩm cần đặt hàng")
     st.dataframe(df_need_order)
 
@@ -52,4 +55,5 @@ if df_sales is not None and df_tonkho is not None:
         st.pyplot(fig)
 else:
     st.warning("Dữ liệu chưa được tải.")
+
 
