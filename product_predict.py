@@ -95,13 +95,13 @@ if df_sales is not None and df_tonkho is not None:
         X, y = create_dataset(data_scaled, look_back, predict_forward)
         X = np.reshape(X, (X.shape[0], X.shape[1], 1))
     
-        # Tạo và huấn luyện mô hình LSTM
-        model = Sequential()
-        model.add(LSTM(50, input_shape=(look_back, 1)))
-        model.add(Dense(predict_forward))
-        model.compile(loss='mean_squared_error', optimizer='adam')
-        model.fit(X, y, epochs=100, batch_size=8, verbose=0)
-    
+        with st.spinner("🔄 Đang huấn luyện mô hình LSTM... Vui lòng chờ vài giây."):
+            model = Sequential()
+            model.add(LSTM(50, input_shape=(look_back, 1)))
+            model.add(Dense(predict_forward))
+            model.compile(loss='mean_squared_error', optimizer='adam')
+            model.fit(X, y, epochs=100, batch_size=8, verbose=0)
+        st.success("✅ Huấn luyện hoàn tất!")
         # Dự báo 3 tháng tiếp theo
         last_input = data_scaled[-look_back:]
         last_input = np.reshape(last_input, (1, look_back, 1))
@@ -109,7 +109,7 @@ if df_sales is not None and df_tonkho is not None:
         prediction = scaler.inverse_transform(prediction_scaled).flatten()
     
         # Hiển thị kết quả dự báo
-        last_date = monthly_sales['date'].max()
+        last_date = monthly_sales['month'].max()
         future_months = pd.date_range(start=last_date + pd.DateOffset(months=1), periods=3, freq='MS')
         df_forecast = pd.DataFrame({'Tháng': future_months.strftime('%Y-%m'), 'Dự báo số lượng bán': prediction.astype(int)})
     
@@ -121,6 +121,7 @@ if df_sales is not None and df_tonkho is not None:
 
 else:
     st.warning("Dữ liệu chưa được tải.")
+
 
 
 
