@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import requests
 from io import BytesIO
-
+import plotly.express as px
 st.set_page_config(page_title="📦 Dự báo đặt hàng kho", layout="wide")
 st.title("📦 Dự báo đặt hàng kho theo doanh số 6 tháng gần nhất")
 
@@ -67,6 +67,7 @@ if df_sales is not None and df_tonkho is not None:
 
 else:
     st.warning("Dữ liệu chưa được tải.")
+
 
 
 
