@@ -10,16 +10,12 @@ st.title("📦 Dự báo đặt hàng kho theo doanh số 6 tháng gần nhất"
 # Đường dẫn file Excel trên GitHub (raw link)
 excel_url = "data_product.xlsx"
 
-@st.cache_data
-def load_data(url):
-    response = requests.get(url)
-    if response.status_code != 200:
-        st.error("Không thể tải file từ GitHub.")
-        return None, None
-    xls = pd.ExcelFile(BytesIO(response.content))
-    return xls.parse("sales"), xls.parse("tonkho")
+# Đọc file Excel
+df = pd.ExcelFile("data_product.xlsx")
 
-df_sales, df_tonkho = load_data(excel_url)
+df_sales = df.parse("sales")
+df_tonkho = df.parse("tonkho")
+
 
 if df_sales is not None and df_tonkho is not None:
     df_sales['date'] = pd.to_datetime(df_sales['date'], errors='coerce')
@@ -56,3 +52,4 @@ if df_sales is not None and df_tonkho is not None:
         st.pyplot(fig)
 else:
     st.warning("Dữ liệu chưa được tải.")
+
