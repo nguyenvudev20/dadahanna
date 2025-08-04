@@ -47,7 +47,7 @@ if df_sales is not None and df_tonkho is not None:
     monthly_sales = df_selected.groupby('month')['numsell'].sum().reset_index()
 
     # Gắn cờ lễ is_tet
-    monthly_sales['is_tet'] = monthly_sales['month'].dt.month.isin([1, 2]).astype(int)
+    monthly_sales['is_tet'] = monthly_sales['month'].dt.month.isin([1, 2, 3]).astype(int)
 
     fig = px.line(
         monthly_sales,
@@ -55,7 +55,7 @@ if df_sales is not None and df_tonkho is not None:
         y="numsell",
         markers=True,
         title=f"Lịch sử bán hàng theo tháng - {selected_spcode}",
-        labels={"month": "Tháng", "numsell": "Số lượng bán"},
+        labels={"month": "Tháng","is_tet": "tết", "numsell": "Số lượng bán"},
         hover_data={"month": True, "numsell": True, "is_tet": True}
     )
     fig.update_traces(hovertemplate='Tháng: %{x}<br>Số lượng: %{y}<br>Tết: %{customdata[0]}')
