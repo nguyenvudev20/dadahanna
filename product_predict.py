@@ -28,7 +28,7 @@ if df_sales is not None and df_tonkho is not None:
     sales_summary["monthly_avg"] = (sales_summary["total_6m_sales"] / 6).round()
     sales_summary["forecast_qty"] = (sales_summary["monthly_avg"] * 3.5).round()
 
-    df_result = pd.merge(sales_summary, df_tonkho[["spcode", "tonkho", "hangve"]], on="spcode", how="left")
+    df_result = pd.merge(sales_summary, df_tonkho[["spcode", "tonkho", "hangve","conlai"]], on="spcode", how="left")
     df_result["tonkho"] = df_result["tonkho"].fillna(0)
     df_result["hangve"] = df_result["hangve"].fillna(0)
     df_result["available"] = df_result["tonkho"] + df_result["hangve"]
@@ -55,5 +55,6 @@ if df_sales is not None and df_tonkho is not None:
         st.pyplot(fig)
 else:
     st.warning("Dữ liệu chưa được tải.")
+
 
 
