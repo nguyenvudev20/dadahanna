@@ -13,7 +13,8 @@ st.title("📦 Dự báo đặt hàng kho theo doanh số 6 tháng gần nhất"
 df = pd.ExcelFile("data_product.xlsx")
 df_sales = df.parse("sales")
 df_tonkho = df.parse("tonkho")
-st.write("📦 dữ liệu ghi nhận đến ngày " + df_sales.tail(1))
+st.write("📦 dữ liệu ghi nhận đến ngày ")
+st.write(df_sales.tail(1)["date"])
 if df_sales is not None and df_tonkho is not None:
     df_sales['date'] = pd.to_datetime(df_sales['date'], errors='coerce')
     latest_date = df_sales["date"].max()
@@ -102,4 +103,5 @@ if df_sales is not None and df_tonkho is not None:
         st.warning("Không đủ dữ liệu để dự báo với LSTM (cần > 10 tháng).")
 else:
     st.warning("Dữ liệu chưa được tải.")
+
 
